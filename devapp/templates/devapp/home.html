@@ -1,0 +1,18 @@
+{% extends 'base.html' %}
+{% block title %}Home - My Blog{% endblock %}
+{% block content %}
+
+<h1>All Posts</h1>
+{% for post in posts %}
+    <h2>{{ post.title }}</h2>
+    <p>{{ post.content }}</p>
+    <small>Posted on: {{ post.created_at }}</small><br>
+
+    {% if user.is_authenticated %}
+        <a href="{% url 'update_post' post.pk %}">Edit</a> |
+        <a href="{% url 'delete_post' post.pk %}">Delete</a>
+    {% endif %}
+    <hr>
+{% endfor %}
+
+{% endblock %}
