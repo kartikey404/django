@@ -1,0 +1,35 @@
+{% extends 'base.html' %}
+{% block content %}
+  <h2>{{ post.title }}</h2>
+  <p>{{ post.content }}</p>
+  <small>By {{ post.author.username }} on {{ post.created_at }}</small>
+  <hr>
+  <form action="{% url 'like_post' post.pk %}" method="POST" style="display: inline;">
+  {% csrf_token %}
+  {% if user in post.likes.all %}
+    <button type="submit">❤️ Unlike</button>
+  {% else %}
+    <button type="submit">🤍 Like</button>
+  {% endif %}
+</form>
+<span>{{ post.total_likes }} like{{ post.total_likes|pluralize }}</span>
+  <h3>Comments</h3>
+  {% for comment in comments %}
+    <p>{{ comment.content }}</p>
+    <small>— {{ comment.author.username }}, {{ comment.created_at }}</small>
+    <hr>
+  {% empty %}
+    <p>No comments yet.</p>
+  {% endfor %}
+
+  {% if user.is_authenticated %}
+    <h4>Add a comment</h4>
+    <form method="POST">
+      {% csrf_token %}
+      {{ form.as_p }}
+      <button type="submit">Post Comment</button>
+    </form>
+  {% else %}
+    <p><a href="{% url 'login' %}">Login</a> to comment.</p>
+  {% endif %}
+{% endblock %}
