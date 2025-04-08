@@ -18,6 +18,9 @@ class CreatePostView(LoginRequiredMixin, CreateView):
     template_name = 'devapp/create_post.html'
     success_url = reverse_lazy('home')  # redirect after success
 
+    def form_valid(self, form):
+        form.instance.author = self.request.user  # ← Set the author
+        return super().form_valid(form)
 
 class UpdatePostView(LoginRequiredMixin, UpdateView):
     model = Post
